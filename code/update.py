@@ -20,30 +20,51 @@ url = 'https://api.trello.com/1/boards/'+BOARD+'/lists?cards=open&key='+KEY+'&to
 cards = trelloParsers.getCardsFromURL(url)
 lista = cards.get("Do zrobienia")
 
-file = open("log.txt", "w")
-for x in lista:
-	file.writelines(x)
-	file.write("\n")
-file.close()
+
+
 
 file = open("log.txt", "r")
+lastCards = int(file.readline().strip())
 readlist = list()
-for x in range(5):
+for x in lista:
 	readlist.append(file.readline().strip())
+	
 file.close()
 
+print (len(lista))
+print (lastCards)
 print (lista)
 print (readlist)
 
-epd = epd7in5_V2.EPD()
-epd.init()
-epd.Clear()
+listchange = 0
+if lastCards == len(lista):
+    y = 0
+    for x in lista:
+        if lista[y] != readlist[y]:
+            listchange = 1
+        y += 1
+else:
+    listchange  = 1
+    
+print (listchange)
 
-font35 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 35)
-
-
-Limage = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
-draw = ImageDraw.Draw(Limage)
-draw.text((2, 0), 'hello world', font = font35, fill = 0)
-epd.display(epd.getbuffer(Limage))
-epd.sleep()
+if listchange == 1:
+    epd = epd7in5_V2.EPD()
+    epd.init()
+    epd.Clear()
+    font35 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 35)
+    Limage = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
+    draw = ImageDraw.Draw(Limage)
+    y = 0
+    for x in lista:
+        draw.text((2, y), x, font = font35, fill = 0)
+        y += 38
+    epd.display(epd.getbuffer(Limage))
+    epd.sleep()
+    file = open("log.txt", "w")
+    file.write(str(len(lista)))
+    file.write("\n")
+    for x in lista:
+        file.writelines(x)
+        file.write("\n")
+    file.close()
