@@ -1,3 +1,5 @@
+#!usr/bin/python3
+#import libraries
 import trelloParsers
 
 import sys
@@ -11,36 +13,37 @@ from waveshare_epd import epd7in5_V2
 import time
 from PIL import Image,ImageDraw,ImageFont
 
-f = open('keys.dat')
-KEY = str(f.readline()).strip()
-TOKEN = str(f.readline()).strip()
-BOARD = str(f.readline()).strip()
-f.close()
+#import Trello credentials
+file = open("keys.dat", "r")
+KEY = str(file.readline()).strip()
+TOKEN = str(file.readline()).strip()
+BOARD = str(file.readline()).strip()
+file.close()
+
+#get current cards values
 url = 'https://api.trello.com/1/boards/'+BOARD+'/lists?cards=open&key='+KEY+'&token='+TOKEN
 cards = trelloParsers.getCardsFromURL(url)
-lista = cards.get("Do zrobienia")
+cardsList = cards.get("Do zrobienia")
 
-
-
-
+#import last card values
 file = open("log.txt", "r")
 lastCards = int(file.readline().strip())
 readlist = list()
-for x in lista:
+for x in cardsList:
 	readlist.append(file.readline().strip())
-	
 file.close()
 
-print (len(lista))
+print (len(cardsList))
 print (lastCards)
-print (lista)
+print (cardsList)
 print (readlist)
 
+#checking if cards changed
 listchange = 0
-if lastCards == len(lista):
+if lastCards == len(cardsList):
     y = 0
-    for x in lista:
-        if lista[y] != readlist[y]:
+    for x in cardsList:
+        if cardsList[y] != readlist[y]:
             listchange = 1
         y += 1
 else:
@@ -56,15 +59,16 @@ if listchange == 1:
     Limage = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(Limage)
     y = 0
-    for x in lista:
+    for x in cardsList:
         draw.text((2, y), x, font = font35, fill = 0)
         y += 38
     epd.display(epd.getbuffer(Limage))
     epd.sleep()
+#export current card values
     file = open("log.txt", "w")
-    file.write(str(len(lista)))
+    file.write(str(len(cardsList)))
     file.write("\n")
-    for x in lista:
+    for x in cardsList:
         file.writelines(x)
         file.write("\n")
     file.close()
