@@ -17,13 +17,14 @@ from PIL import Image,ImageDraw,ImageFont
 file = open("keys.dat", "r")
 KEY = str(file.readline()).strip()
 TOKEN = str(file.readline()).strip()
-BOARD = str(file.readline()).strip()
+BOARD_ID = str(file.readline()).strip()
+BOARD_NAME = str(file.readline()).strip()
 file.close()
 
 #get current cards values
-url = 'https://api.trello.com/1/boards/'+BOARD+'/lists?cards=open&key='+KEY+'&token='+TOKEN
+url = 'https://api.trello.com/1/boards/'+BOARD_ID+'/lists?cards=open&key='+KEY+'&token='+TOKEN
 cards = trelloParsers.getCardsFromURL(url)
-cardsList = cards.get("Do zrobienia")
+cardsList = cards.get(BOARD_NAME)
 
 #import last card values
 file = open("log.txt", "r")
