@@ -3,12 +3,19 @@
 This project covers the design of a device that displays a to-do list that is pulled live from a Trello board. The whole is based on the Raspberry Pi Zero 2 WH minicomputer and e-paper display.
 
 
+![foto](https://mikrokontroler.pl/wp-content/uploads/2022/02/calkowicie_zlozony.jpg)
+
 ## Features
 
 - Display the current list from Trello
 - Automatic synchronization
 - Screen refresh only when content is changed
 
+
+
+## Detailed instruction
+
+Detailed instructions are available in the form of an article on the [mikrokontroler.pl](https://mikrokontroler.pl/2022/02/15/projekt-cyfrowa-lista-zadan-oparta-o-wyswietlacz-e-papier-raspberry-pi-zero-2-i-srodowisko-trello/) portal
 
 
 ## Installation
